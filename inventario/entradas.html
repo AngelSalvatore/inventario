@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventarios</title>
+   <!--Bootstrap-->
+   <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&amp;display=swap">
+   <link rel="stylesheet" href="../assets/fonts/font-awesome.min.css">
+   <link rel="stylesheet" href="../assets/css/Animated-Toggle-NavBar-BS5.css">
+   <link rel="stylesheet" href="../assets/css/Animated-Type-Heading.css">
+   <link rel="stylesheet" href="../assets/css/Beautiful-Contact-from-animated.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/css/theme.bootstrap_4.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+   <link rel="stylesheet" href="../assets/css/Ludens---1-Index-Table-with-Search--Sort-Filters-v20.css">
+   <!--Fin Bootstrap-->
+</head>
+<body>
+    <nav class="navbar fixed-top bg-dark navbar-dark">
+        <div class="container"><a class="navbar-brand" href="#">Paneles solares</a><button data-bs-toggle="collapse" class="navbar-toggler collapsed" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse text-center" id="navcol-1">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#">First Item</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Second Item</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Third Item</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>	
+
+    <div class="container container-contact100">
+        <div class="wrap-contact100">
+            <form id="formulario-entrada" class="contact100-form validate-form">
+                <div class="caption v-middle text-center">
+                    <h1 class="cd-headline clip">
+                        <span class="cd-words-wrapper">
+                        </span>
+                        Compras - Entradas
+                      </h1>
+                </div><br/>
+                <div class="wrap-input100 validate-input" data-validate="Please enter your name">
+                    <input class="form-control input100" id="fabricante" type="text" placeholder="Fabricante">
+                    <span class="focus-input100"></span></div>
+                
+                <div class="wrap-input100 validate-input" data-validate="Please enter your email: e@a.x">
+                    <input id="recibio" class="form-control input100" type="text" placeholder="Recibio"  ><span class="focus-input100"></span></div>
+
+                <!--<div class="wrap-input100 validate-input" data-validate="Please enter your email: e@a.x">
+                    <input id="tipodepanel" class="form-control input100" type="text" placeholder="Tipo de panel"  ><span class="focus-input100"></span></div>-->
+
+                <select id="tipodepanel" class="form-select" aria-label="Default select example">
+                    <option selected>Opciones de panel</option>
+                    <option value="A">A - 8</option>
+                    <option value="B">B - 10</option>
+                    <option value="C">C - 12</option>
+                </select><br/>
+
+                <div class="wrap-input100 validate-input" data-validate="">
+                    <input id="unidades" class="form-control input100" type="text" placeholder="Unidades"><span class="focus-input100"></span></div>
+
+                <div id="tarea-costo" class="wrap-input100 validate-input" data-validate="Digita el costo">
+                    <input id="costo" class="form-control input100" type="number" placeholder="Costo"><span class="focus-input100"></span></div>
+
+                <div class="wrap-input100 validate-input" data-validate="">
+                    <input id="totalcosto" class="form-control input100" type="text" placeholder="Costo Total:"  ><span class="focus-input100"></span></div>
+
+                <div class="container-contact100-form-btn">
+                    <button class="btn btn-primary contact100-form-btn " style="background-color: rgb(4, 95, 181);"  id="btn-formulario-entrada"><span>Guardar&nbsp;<i class="fa fa-star fa fa-paper-plane-o m-r-6" aria-hidden="true"></i></span></button></div>
+            </form>
+        </div>
+    </div>
+
+    <!--Mis conexiones Firebase y Firestore-->
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-firestore.js"></script>
+    <script src="../firebase.js"></script>
+    <script src="inventariojs/entradas.js"></script>
+    <!--Bootstrap y JQuery JS-->
+    <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../assets/js/bs-init.js"></script>
+    <script src="../assets/js/Animated-Type-Heading-type-headline.js"></script>
+    <script src="../assets/js/Beautiful-Contact-from-animated-script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/jquery.tablesorter.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/widgets/widget-filter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/widgets/widget-storage.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="../assets/js/Ludens---1-Index-Table-with-Search--Sort-Filters-v20-Ludens---1-Index-Table-with-Search--Sort-Filters.js"></script>
+    <script src="../assets/js/Ludens---1-Index-Table-with-Search--Sort-Filters-v20-Ludens---Material-UI-Actions.js"></script>
+    <script src="../assets/js/theme.js"></script>
+</body>

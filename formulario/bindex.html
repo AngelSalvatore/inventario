@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-firestore.js"></script>
+
+</head>
+<body>
+    <form id="formulario-entada">
+        <input type="text" id="fabricante" placeholder="fabricante" autofocus>
+        <input type="text" id="recicibio" placeholder="recicibio">
+        <input type="text" id="tipodepanel" placeholder="Tipo de panel">
+        <input type="text" id="unidades" placeholder="Unidades">
+        <input type="text" id="costo" placeholder="Costo">
+        <input type="text" id="totalcosto" placeholder="Total">
+
+        <button id="btn-formulario-entrada">Enviar</button>
+
+        <div class="col-md-6" id="verBDEntradas">
+            
+        </div>
+    </form>
+    <script>
+        //Conexion firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJztbIhQqeZFugeHnAQtHOVOzoW19v0W4",
+            authDomain: "angular-crud-firebase-9c8e4.firebaseapp.com",
+            databaseURL: "https://angular-crud-firebase-9c8e4.firebaseio.com",
+            projectId: "angular-crud-firebase-9c8e4",
+            storageBucket: "angular-crud-firebase-9c8e4.appspot.com",
+            messagingSenderId: "501917133469",
+            appId: "1:501917133469:web:64097d0c931de7f9dac274"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        //Asignar en cariable el formulario
+        const formularioEntrada = document.getElementById('formulario-entada');
+
+        //Guardar tarea en una constante
+        const GuardaLasEntradas = (Fabricante, Recicibio, TipoDePanel, Unidades, Costo, TotalCosto) =>
+            //asincrono en cuanto se envie deolvera algo
+            db.collection('Entradas').doc().set({
+                Fabricante,
+                Recicibio,
+                TipoDePanel,
+                Unidades,
+                Costo,
+                TotalCosto
+            })
+        
+        //escuchar el envio y enviar una funcion al escucharlo
+        formularioEntrada.addEventListener('submit', async (e)=> {
+            //no refrescar pagina
+            e.preventDefault();
+            //asignar constantes a los datos ingresados por teclado
+            const Fabricante = formularioEntrada['fabricante'];
+            const Recicibio = formularioEntrada['recicibio'];
+            const TipoDePanel = formularioEntrada['tipodepanel'];
+            const Unidades = formularioEntrada['unidades'];
+            const Costo = formularioEntrada['costo'];
+            const TotalCosto = formularioEntrada['totalcosto'];
+            
+            //una vez se guarde lo receteamos
+            await GuardaLasEntradas(Fabricante.value, Recicibio.value, TipoDePanel.value, Unidades.value, Costo.value, TotalCosto.value);
+            formularioEntrada.reset();
+            Fabricante.focus();
+            
+        })
+
+        //Mostrar datos en pantalla
+        const verBDLasEntradas = document.getElementById('verBDEntradas');
+
+        const obtenerEntradas = () => db.collection('Entradas').get();
+        window.addEventListener('DOMContentLoaded', async (e) =>{
+            const consultarEntradas = await obtenerEntradas();
+            consultarEntradas.forEach(doc => {
+                console.log(doc.data());
+
+                const Datos = doc.data();
+
+                verBDLasEntradas.innerHTML += `
+                    <div>
+                        <table style="border: #d3d3d3 solid 3px">
+                        <tr>
+                            <td>Fabricante</td>
+                            <td>Recibio</td>
+                            <td>Tipo de panel</td>
+                            <td>Unidades</td>
+                            <td>Costo</td>
+                            <td>Costo total</td>
+                        </tr>
+                        <tr>
+                            <td>${Datos.Fabricante}</td>
+                            <td>${Datos.Recicibio}</td>
+                            <td>${Datos.TipoDePanel}</td>
+                            <td>${Datos.Unidades}</td>
+                            <td>${Datos.Costo}</td>
+                            <td>${Datos.TotalCosto}</td>
+                        </tr>
+                        </table>
+                    </div>`
+            });
+        })
+
+    </script>
+</body>
+</html>

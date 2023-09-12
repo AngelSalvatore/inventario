@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+
+    <form id="registrar-usuario">
+            <div class="form-group">
+            <input type="text" id="registrar-correo" class="form-control" placeholder="usuario" required>
+        </div>
+        <div class="form-group">
+            <input type="text" id="registrar-contrasena" class="form-control" placeholder="Contraseña" required>
+        </div>
+        <button class="btn btn-primary" type="submit">Acceder</button>
+    </form>
+
+    <!--Seccion de contenido principal-->
+    <div class="container p-4">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <ul class="list-group tasks">
+                        <li class="list-group-item">
+                            
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    
+    <!--Firebase-->
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJztbIhQqeZFugeHnAQtHOVOzoW19v0W4",
+            authDomain: "angular-crud-firebase-9c8e4.firebaseapp.com",
+            databaseURL: "https://angular-crud-firebase-9c8e4.firebaseio.com",
+            projectId: "angular-crud-firebase-9c8e4",
+            storageBucket: "angular-crud-firebase-9c8e4.appspot.com",
+            messagingSenderId: "501917133469",
+            appId: "1:501917133469:web:64097d0c931de7f9dac274"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+    </script>
+
+    <!--Registrar usuario-->
+    <script>
+        //Registrar
+        const registrarUsuario = document.querySelector('#registrar-usuario');
+
+        registrarUsuario.addEventListener('submit', (e)=> {
+            e.preventDefault();
+            
+            const registrarCorreo = document.getElementById('registrar-correo').value;
+            const registrarContrasena = document.getElementById('registrar-contrasena').value;
+            console.log(registrarCorreo, registrarContrasena);
+            auth
+            .createUserWithEmailAndPassword(registrarCorreo, registrarContrasena)
+            .then(Credential => {
+                registrarUsuario.reset(); 
+                //cerrar modal
+                $('#registrar').modal('hide');
+                console.log('registrado');
+            })
+        });
+        //Iniciar Sesion
+        const iniciarSesion = document.querySelector('#iniciar-sesion');
+
+        iniciarSesion.addEventListener('submit', e => {
+            e.preventDefault();
+            const iniciarCorreo = document.querySelector('#iniciar-correo').value;
+            const iniciarContrasena = document.querySelector('#iniciar-contrasena').value;
+           
+            auth
+            .signInWithEmailAndPassword(iniciarCorreo, iniciarContrasena)
+            .then(Credential => {
+                iniciarSesion.reset(); 
+                //cerrar modal
+                $('#ingresar').modal('hide');
+                console.log('iniciado');
+            })
+        })
+        //Iniciar con google
+        const iniciarConGoogle = document.querySelector('#iniciar-google');
+        iniciarConGoogle.addEventListener('click', e => {
+            console.log('hola');
+            const autenticarConGmail = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(autenticarConGmail)
+            .then(result => {
+                console.log('Google registrado');
+            }).catch(err =>{
+                console.log(err)
+            })
+
+
+        });
+        //Cerrar sesion
+        /*const cerrarSesion = document.querySelector('#cerrar-sesion');
+        cerrarSesion.addEventListener('clic', e => {
+            e.preventDefault();
+            auth.signOut().then(() => {
+                console.log('Cerro su sesion');
+            })
+        })*/
+        function cerrarSesion(){
+            auth.signOut().then(() => {
+                console.log('Cerro sesion');
+            })
+        }
+        //publicaciones
+        const listaTasks = document.querySelector('.tasks');
+        //Mostrar datos de tasks
+        const mostrarTasks = data => {
+            if(data.length){
+                let html = '';
+                data.forEach(doc => {
+                    const task = doc.data()
+                    const li = `
+                        <li class="list-group-item list-group-item-action">
+                            <h5>${task.title}</h5>
+                            <p>${task.description}</h5>
+                        </li>
+                    `;
+                    html += li;
+                });
+                listaTasks.innerHTML = html;
+            }else{
+                listaTasks.innerHTML = '<p>Logeate para ver la informacion</p>'
+            }
+        }
+
+        //Eventos
+        //list los datos para las personas autenticadas user es por default de firebase
+        auth.onAuthStateChanged(user => {
+            if(user){
+                db.collection('tasks')
+                .get()
+                .then((snapshot) => {
+                  mostrarTasks(snapshot.docs);
+                })
+            }else{
+                mostrarTasks([]);
+                console.log('no registrado')
+            }
+        })
+
+    </script>
+    <!--Boostrap-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
